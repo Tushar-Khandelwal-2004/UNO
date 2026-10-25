@@ -22,7 +22,7 @@ export function Hand({ cards, layout, drag, legalCardIds, isMyTurn }: HandProps)
   const visibleRows = rows.filter((row) => row.length > 0);
 
   return (
-    <div ref={layout.ref} onContextMenu={(event) => event.preventDefault()} className="relative flex min-h-0 w-full flex-1 items-end justify-center overflow-visible px-1 pb-1 pt-7">
+    <div ref={layout.ref} onContextMenu={(event) => event.preventDefault()} className="relative flex min-h-0 w-full flex-1 items-end justify-center overflow-visible px-4 pb-1 pt-8">
       <span className="absolute left-1 top-1 z-20 text-[10px] font-extrabold uppercase tracking-[.14em] text-uno-muted">{cards.length} cards</span>
       <span data-card-probe className="pointer-events-none absolute h-[var(--card-height)] w-[var(--card-width)] opacity-0" aria-hidden="true" />
       <div className={`flex w-full min-h-0 flex-col justify-end ${visibleRows.length === 2 ? "gap-0" : ""}`}>
@@ -38,7 +38,7 @@ export function Hand({ cards, layout, drag, legalCardIds, isMyTurn }: HandProps)
                   width: rowLayout.cardWidth,
                   height: rowLayout.cardWidth / 0.68,
                   marginLeft: index === 0 ? 0 : -(rowLayout.cardWidth - rowLayout.step),
-                  zIndex: index + 1,
+                  zIndex: 1,
                   "--card-width": `${rowLayout.cardWidth}px`,
                   "--card-height": `${rowLayout.cardWidth / 0.68}px`,
                 } as CSSProperties;

@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @theme {
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
   --color-uno-background: #202427;
   --color-uno-felt: #27343a;
   --color-uno-felt-deep: #1c292e;
@@ -141,6 +146,74 @@ button:disabled {
   background:
     repeating-linear-gradient(135deg, rgb(255 255 255 / 12%) 0 3px, transparent 3px 7px),
     #152b43;
+}
+
+.game-table-grid {
+  display: grid;
+  grid-template-areas:
+    "top top top"
+    "left center right"
+    "left status right";
+  grid-template-columns: minmax(96px, 140px) minmax(0, 1fr) minmax(96px, 140px);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  min-height: 0;
+  height: 100%;
+  padding: 16px;
+}
+
+.game-table-top { grid-area: top; }
+.game-table-left { grid-area: left; }
+.game-table-center { grid-area: center; }
+.game-table-right { grid-area: right; }
+.game-table-status { grid-area: status; }
+
+.seat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: center;
+  gap: 12px;
+}
+
+.seat-column {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.play-piles {
+  display: flex;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--card-width) * 1.5);
+  padding: 16px;
+}
+
+@media (max-width: 700px) {
+  .game-table-grid {
+    grid-template-areas:
+      "top top top"
+      "center center center"
+      "status status status";
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
+  .game-table-left,
+  .game-table-right {
+    display: none;
+  }
+
+  .play-piles {
+    gap: 24px;
+    padding: 12px 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

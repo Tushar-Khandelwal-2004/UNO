@@ -9,7 +9,7 @@ export function fitRow(count: number, width: number, desired: number, minimum: n
 }
 
 export function calculateHand(count: number, width: number, desired: number, minimum: number) {
-  const oneRowCapacity = Math.max(1, Math.floor((width - minimum) / Math.max(30, minimum * .3)) + 1);
+  const oneRowCapacity = Math.max(1, Math.floor((width - minimum) / Math.max(40, minimum * .4)) + 1);
   const rows = count > oneRowCapacity ? 2 : 1;
   const capacity = rows === 2 ? Math.ceil(count / 2) : count;
   return { capacity, rows, perPage: count, pages: 1, desired, minimum, width };

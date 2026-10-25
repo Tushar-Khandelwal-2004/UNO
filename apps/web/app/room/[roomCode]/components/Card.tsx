@@ -71,8 +71,8 @@ export function Card({ card, variant = "hand", legal = false, isMyTurn = false, 
   const stateClasses = interactive
     ? isMyTurn
       ? legal
-        ? "legal-pulse cursor-grab ring-2 ring-white/95 hover:-translate-y-3 hover:shadow-card-hover active:cursor-grabbing"
-        : "cursor-not-allowed brightness-[.45] saturate-[.45]"
+        ? "legal-pulse cursor-grab ring-2 ring-white/95 hover:z-40 hover:-translate-y-3 hover:shadow-card-hover active:cursor-grabbing"
+        : "cursor-not-allowed brightness-[.6] saturate-[.7]"
       : "cursor-default brightness-75 saturate-75"
     : "cursor-default";
 
@@ -84,7 +84,7 @@ export function Card({ card, variant = "hand", legal = false, isMyTurn = false, 
       <span className="pointer-events-none absolute left-[5%] top-[3%] z-10 text-[calc(var(--card-width)*.28)] font-extrabold leading-none text-white drop-shadow-[1px_2px_0_rgb(0_0_0_/_35%)]">{cardLabel(card)}</span>
       <CardIcon card={card} />
       <span className="pointer-events-none absolute bottom-[3%] right-[5%] z-10 rotate-180 text-[calc(var(--card-width)*.28)] font-extrabold leading-none text-white drop-shadow-[1px_2px_0_rgb(0_0_0_/_35%)]">{cardLabel(card)}</span>
-      {!legal && isMyTurn && interactive ? <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 bg-[repeating-linear-gradient(135deg,transparent_0_9px,rgb(0_0_0_/_22%)_9px_11px)]" /> : null}
+      {!legal && isMyTurn && interactive ? <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 bg-[repeating-linear-gradient(135deg,transparent_0_9px,rgb(0_0_0_/_12%)_9px_11px)]" /> : null}
       {children}
     </>
   );
@@ -95,7 +95,7 @@ export function Card({ card, variant = "hand", legal = false, isMyTurn = false, 
       aria-label={cardAriaLabel(card)}
       aria-pressed={selected}
       aria-disabled={interactive && (!isMyTurn || !legal)}
-      className={cn(CARD_BASE, CARD_TONES[card.color], `h-[var(--card-height)] w-[var(--card-width)]`, stateClasses, selected && "-translate-y-3 scale-[1.04] shadow-card-hover ring-4 ring-uno-accent", shaking && "card-shake", variant === "discard" && "shadow-card-hover", variant === "ghost" && "pointer-events-none scale-[1.08] shadow-[0_22px_38px_rgb(0_0_0_/_55%)]", variant === "picker" && "h-36 w-24", className)}
+      className={cn(CARD_BASE, CARD_TONES[card.color], `h-[var(--card-height)] w-[var(--card-width)]`, stateClasses, selected && "z-40 -translate-y-3 scale-[1.04] shadow-card-hover ring-4 ring-uno-accent", shaking && "card-shake", variant === "discard" && "shadow-card-hover", variant === "ghost" && "pointer-events-none scale-[1.08] shadow-[0_22px_38px_rgb(0_0_0_/_55%)]", variant === "picker" && "h-36 w-24", className)}
       style={style}
       {...restButtonProps}
     >

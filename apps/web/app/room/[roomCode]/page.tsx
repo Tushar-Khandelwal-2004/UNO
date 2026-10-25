@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { io, type Socket } from "socket.io-client";
 import type { Card } from "@uno/game-engine";
+import { checkLayout } from "@uno/game-engine/layoutGeometry";
 import type { PublicRoom } from "@uno/protocol";
 import { ActionBar } from "./components/ActionBar";
 import { ConnectionBanner } from "./components/ConnectionBanner";
@@ -61,6 +62,14 @@ export default function RoomPage() {
   const sortedHand = useMemo(() => sortHand(hand), [hand]);
   const legalCardIds = useLegalCards(sortedHand, topCard, room?.game?.currentColor, isMyTurn);
   const handLayout = useHandLayout(sortedHand.length, viewport.phone, viewport.short);
+  const drawPileRef = useRef<HTMLDivElement>(null);
+  const discardPileRef = useRef<HTMLDivElement>(null);
+  const topBarRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLElement>(null);
+  const playerInfoRef = useRef<HTMLDivElement>(null);
+  const handZoneRef = useRef<HTMLElement>(null);
+  const actionBarRef = useRef<HTMLElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!playerName) {
@@ -76,18 +85,6 @@ export default function RoomPage() {
     const timer = window.setInterval(() => setNow(Date.now()), 250);
     return () => window.clearInterval(timer);
   }, [room?.game?.turnEndsAt]);
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "development") return;
-    const warnIfOverflowing = () => {
-      if (document.scrollingElement && document.scrollingElement.scrollHeight > window.innerHeight) {
-        console.warn("UNO viewport overflow detected", { scrollHeight: document.scrollingElement.scrollHeight, innerHeight: window.innerHeight });
-      }
-    };
-    warnIfOverflowing();
-    window.addEventListener("resize", warnIfOverflowing);
-    return () => window.removeEventListener("resize", warnIfOverflowing);
-  });
 
   useEffect(() => {
     if (!playerName) return;
@@ -114,6 +111,28 @@ export default function RoomPage() {
       nextSocket.disconnect();
     };
   }, [code, guest, playerName]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const check = () => {
+      const named = [
+        ["top-bar", topBarRef.current],
+        ["draw-pile", drawPileRef.current],
+        ["discard-pile", discardPileRef.current],
+        ["status-line", statusRef.current],
+        ["player-info", playerInfoRef.current],
+        ["hand-zone", handZoneRef.current],
+        ["action-bar", actionBarRef.current],
+        ...Array.from(tableRef.current?.querySelectorAll<HTMLElement>("[data-opponent-seat]") ?? []).map((element, index) => [`opponent-${index}`, element] as const),
+      ] as const;
+      const rects = named.flatMap(([name, element]) => element ? [{ name, left: element.getBoundingClientRect().left, top: element.getBoundingClientRect().top, right: element.getBoundingClientRect().right, bottom: element.getBoundingClientRect().bottom }] : []);
+      const report = checkLayout(rects, innerWidth, innerHeight, document.scrollingElement?.scrollHeight ?? 0);
+      if (report.overlaps.length || report.outside.length || report.scroll) console.warn("UNO layout checker", report);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  });
 
   const showToast = useCallback((message: string) => {
     setToast(message);
@@ -164,19 +183,9 @@ export default function RoomPage() {
   const noMoves = isMyTurn && sortedHand.length > 0 && legalCardIds.size === 0;
   const unoTargets = room?.players.filter((candidate) => candidate.id !== guest && candidate.cardCount === 1 && !candidate.unoCalled) ?? [];
   const opponents = room?.players.filter((candidate) => candidate.id !== guest) ?? [];
-
-  const opponentPosition = (index: number): string => {
-    const positions = [
-      "left-1/2 top-2 -translate-x-1/2",
-      "left-2 top-1/2 -translate-y-1/2",
-      "right-2 top-1/2 -translate-y-1/2",
-      "bottom-2 left-1/2 -translate-x-1/2",
-      "left-[8%] top-[18%]",
-      "right-[8%] top-[18%]",
-      "left-[22%] top-2",
-    ];
-    return positions[index % positions.length] ?? positions[0]!;
-  };
+  const topOpponents = opponents.slice(0, opponents.length <= 5 ? opponents.length : opponents.length === 6 ? 2 : 3);
+  const leftOpponents = opponents.slice(topOpponents.length, topOpponents.length + 2);
+  const rightOpponents = opponents.slice(topOpponents.length + 2);
 
   const copyInvite = async () => {
     await navigator.clipboard?.writeText(`${window.location.origin}/room/${room?.code ?? code}`);
@@ -190,31 +199,41 @@ export default function RoomPage() {
   const timerSeconds = room.game?.turnEndsAt ? Math.max(0, Math.ceil((room.game.turnEndsAt - now) / 1000)) : undefined;
 
   return (
-    <main className="fixed inset-0 grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto_auto] overflow-hidden overscroll-none bg-uno-background p-2 text-uno-text sm:p-3">
-      <TopBar room={room} onLeave={() => router.push("/")} onTransferHost={(playerId) => emitWithRoom("room:transfer-host", { playerId })} hapticsEnabled={hapticsEnabled} onToggleHaptics={() => { const next = !hapticsEnabled; setHapticsEnabled(next); window.localStorage.setItem("uno-haptics-enabled", String(next)); }} />
+    <main className="fixed inset-0 grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] gap-2 overflow-hidden overscroll-none bg-uno-background p-2 text-uno-text sm:p-3">
+      <div ref={topBarRef}><TopBar room={room} onLeave={() => router.push("/")} onTransferHost={(playerId) => emitWithRoom("room:transfer-host", { playerId })} hapticsEnabled={hapticsEnabled} onToggleHaptics={() => { const next = !hapticsEnabled; setHapticsEnabled(next); window.localStorage.setItem("uno-haptics-enabled", String(next)); }} /></div>
       <ConnectionBanner disconnected={disconnected} recovered={recovered} />
 
-      <section className="relative min-h-0 overflow-hidden px-1 py-2 sm:px-4">
+      <section ref={tableRef} className="relative min-h-0 overflow-hidden px-1 py-2 sm:px-4">
         {room.game ? (
-          <div className="felt-texture relative grid h-full min-h-0 place-items-center overflow-hidden rounded-panel border border-white/10 shadow-inner">
-            {opponents.map((opponent, index) => <div key={opponent.id} className={`absolute z-seat max-w-[31%] scale-[.72] sm:scale-90 ${opponentPosition(index)}`}><OpponentSeat player={opponent} isTurn={room.game?.currentPlayerId === opponent.id} turnEndsAt={room.game?.currentPlayerId === opponent.id ? room.game.turnEndsAt : undefined} onCatchUno={!opponent.unoCalled && opponent.cardCount === 1 ? () => emitWithRoom("game:call-uno", { targetPlayerId: opponent.id }) : undefined} /></div>)}
-            <div className="relative z-table flex items-center gap-4 sm:gap-12">
-              <DrawPile count={room.game.drawPileCount} disabled={!isMyTurn} pulse={noMoves} onDraw={() => emitWithRoom("game:draw")} />
-              <DiscardPile topCard={topCard} currentColor={room.game.currentColor} targetRef={drag.dropTargetRef} active={drag.isDropActive || Boolean(drag.selectedCardId)} onClick={drag.dropSelectedCard} />
-              <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/25 px-3 py-1 text-xs font-bold text-white/80"><span className="mr-1">{room.game.currentPlayerId === guest ? "Your turn" : `Waiting for ${currentPlayer?.displayName ?? "player"}`}</span>{timerSeconds !== undefined ? <span className="text-uno-accent">· {timerSeconds}s</span> : null}{room.game.direction ? <span className="ml-2 text-white/60">{room.game.direction === 1 ? "↻" : "↺"}</span> : null}</div>
+          <div className="felt-texture game-table-grid rounded-panel border border-white/10 shadow-inner">
+            <div className="game-table-top seat-row">
+              {topOpponents.map((opponent) => <div data-opponent-seat key={opponent.id}><OpponentSeat player={opponent} isTurn={room.game?.currentPlayerId === opponent.id} turnEndsAt={room.game?.currentPlayerId === opponent.id ? room.game.turnEndsAt : undefined} onCatchUno={!opponent.unoCalled && opponent.cardCount === 1 ? () => emitWithRoom("game:call-uno", { targetPlayerId: opponent.id }) : undefined} /></div>)}
             </div>
+            <div className="game-table-left seat-column">
+              {leftOpponents.map((opponent) => <div data-opponent-seat key={opponent.id}><OpponentSeat player={opponent} isTurn={room.game?.currentPlayerId === opponent.id} turnEndsAt={room.game?.currentPlayerId === opponent.id ? room.game.turnEndsAt : undefined} onCatchUno={!opponent.unoCalled && opponent.cardCount === 1 ? () => emitWithRoom("game:call-uno", { targetPlayerId: opponent.id }) : undefined} /></div>)}
+            </div>
+            <div className="game-table-center play-piles">
+              <DrawPile count={room.game.drawPileCount} disabled={!isMyTurn} pulse={noMoves} pileRef={drawPileRef} onDraw={() => emitWithRoom("game:draw")} />
+              <DiscardPile topCard={topCard} currentColor={room.game.currentColor} targetRef={drag.dropTargetRef} pileRef={discardPileRef} active={drag.isDropActive || Boolean(drag.selectedCardId)} onClick={drag.dropSelectedCard} />
+            </div>
+            <div className="game-table-right seat-column">
+              {rightOpponents.map((opponent) => <div data-opponent-seat key={opponent.id}><OpponentSeat player={opponent} isTurn={room.game?.currentPlayerId === opponent.id} turnEndsAt={room.game?.currentPlayerId === opponent.id ? room.game.turnEndsAt : undefined} onCatchUno={!opponent.unoCalled && opponent.cardCount === 1 ? () => emitWithRoom("game:call-uno", { targetPlayerId: opponent.id }) : undefined} /></div>)}
+            </div>
+            <div ref={statusRef} className="game-table-status flex items-center justify-center gap-2 rounded-full bg-black/25 px-3 py-1 text-xs font-bold text-white/80"><span>{room.game.currentPlayerId === guest ? "Your turn" : `Waiting for ${currentPlayer?.displayName ?? "player"}`}</span>{timerSeconds !== undefined ? <span className="text-uno-accent">· {timerSeconds}s</span> : null}{room.game.direction ? <span className="text-white/60">{room.game.direction === 1 ? "↻" : "↺"}</span> : null}</div>
           </div>
         ) : <div className="felt-texture grid h-full min-h-0 place-items-center overflow-hidden rounded-panel border border-white/10 p-3 shadow-inner"><LobbyPanel room={room} isHost={isHost} onStart={() => emitWithRoom("room:start")} onTransferHost={(playerId) => emitWithRoom("room:transfer-host", { playerId })} onCopy={copyInvite} /></div>}
       </section>
 
-      <section className="relative z-hand mx-auto flex min-h-[clamp(100px,18dvh,165px)] w-full max-w-6xl items-end px-1 sm:px-4">
+      <section ref={playerInfoRef} className="relative z-hand mx-auto flex min-h-11 w-full max-w-5xl items-center justify-between px-1 sm:px-4">
+        <div className={`flex min-h-11 items-center gap-2 rounded-button border px-3 ${isMyTurn ? "border-uno-accent/60 bg-uno-accent/10" : "border-white/10 bg-black/10"}`}><span className="grid h-8 w-8 place-items-center rounded-full border-2 border-uno-blue bg-[#2d638b] text-xs font-extrabold">{playerName.slice(0, 1).toUpperCase()}</span><span className="text-sm font-extrabold">{playerName}</span><span className="text-xs text-uno-muted">{hand.length} cards</span></div>
+      </section>
+
+      <section ref={handZoneRef} className="relative z-hand mx-auto flex min-h-0 w-full max-w-6xl items-end px-1 sm:px-4">
         <Hand cards={sortedHand} layout={handLayout} drag={drag} legalCardIds={legalCardIds} isMyTurn={isMyTurn} />
       </section>
 
-      <section className="relative z-hand mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-1 pb-1 sm:px-4">
-        <div className={`flex min-h-11 items-center gap-2 rounded-button border px-3 ${isMyTurn ? "border-uno-accent/60 bg-uno-accent/10" : "border-white/10 bg-black/10"}`}><span className="grid h-8 w-8 place-items-center rounded-full border-2 border-uno-blue bg-[#2d638b] text-xs font-extrabold">{playerName.slice(0, 1).toUpperCase()}</span><span className="hidden text-sm font-extrabold sm:inline">{playerName}</span><span className="text-xs text-uno-muted">{hand.length} cards</span></div>
+      <section ref={actionBarRef} className="relative z-hand mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-1 pb-1 sm:px-4">
         <ActionBar isMyTurn={isMyTurn} hasNoMoves={noMoves} canCallUno={hand.length === 1 && !player?.unoCalled && !disconnected} onDraw={() => emitWithRoom("game:draw")} onCallUno={() => emitWithRoom("game:call-uno", { targetPlayerId: guest })} isShortLandscape={viewport.short} />
-        <div className="hidden items-center gap-2 sm:flex"><span className="text-xs text-uno-muted">Current color</span><span className="h-4 w-4 rounded-full border-2 border-white/80" style={{ backgroundColor: room.game?.currentColor ?? "#8c979c" }} /></div>
       </section>
 
       <div className="sr-only" aria-live="polite">{isMyTurn ? "Your turn" : `Waiting for ${currentPlayer?.displayName ?? "the current player"}`}{error ? ` ${error}` : ""}</div>

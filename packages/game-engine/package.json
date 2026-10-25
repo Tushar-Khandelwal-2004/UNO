@@ -8,6 +8,11 @@
       "types": "./src/index.ts",
       "development": "./src/index.ts",
       "import": "./dist/index.js"
+    },
+    "./layoutGeometry": {
+      "types": "./src/layoutGeometry.ts",
+      "development": "./src/layoutGeometry.ts",
+      "import": "./dist/layoutGeometry.js"
     }
   },
   "scripts": {
