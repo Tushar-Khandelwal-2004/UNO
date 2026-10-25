@@ -33,12 +33,12 @@
   --z-hand: 30;
   --z-drag: 100;
   --z-overlay: 200;
-  --card-width: clamp(56px, 10vw, 96px);
+  --card-width: clamp(56px, 17.8vw, 96px);
   --card-height: calc(var(--card-width) / 0.68);
 }
 
 :root {
-  --card-width: clamp(56px, 10vw, 96px);
+  --card-width: clamp(56px, 17.8vw, 96px);
   --card-height: calc(var(--card-width) / 0.68);
 }
 
@@ -155,6 +155,11 @@ button:disabled {
 }
 
 @media (max-height: 480px) and (orientation: landscape) {
+  :root {
+    --card-width: clamp(48px, 8.75vw, 68px);
+    --card-height: calc(var(--card-width) / 0.68);
+  }
+
   .short-landscape-actions {
     position: absolute;
     top: 3.25rem;
