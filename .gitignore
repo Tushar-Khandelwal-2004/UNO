@@ -1,1 +1,24 @@
-docs
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and local tooling
+*.log
+.npm/
+
+# Product planning docs are intentionally kept local for now.
+docs/
+
+# Chat/tool attachments and local agent state
+.opencode/

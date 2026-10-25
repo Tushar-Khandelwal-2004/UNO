@@ -1,0 +1,25 @@
+{
+  "name": "uno-multiplayer",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Anonymous multiplayer UNO game",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @uno/web",
+    "dev:realtime": "npm run dev --workspace @uno/realtime",
+    "build:packages": "npm run build --workspace @uno/protocol && npm run build --workspace @uno/game-engine",
+    "build:apps": "npm run build --workspace @uno/realtime && npm run build --workspace @uno/web",
+    "build": "npm run build:packages && npm run build:apps",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  }
+}
