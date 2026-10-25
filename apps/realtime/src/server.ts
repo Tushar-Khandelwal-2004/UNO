@@ -5,6 +5,7 @@ import {
   createGame,
   drawCards,
   drawOne,
+  getCurrentPlayer,
   playCard,
   publicGameState,
   type GameState,
@@ -40,6 +41,8 @@ type Room = {
   hostId: string;
   players: RoomPlayer[];
   game?: GameState;
+  // Optional public timer metadata; clients must tolerate its absence.
+  turnEndsAt?: number;
   cleanupTimer?: NodeJS.Timeout;
   hostTransferTimer?: NodeJS.Timeout;
 };
@@ -109,8 +112,14 @@ function publicRoom(room: Room): PublicRoom {
     maxPlayers: MAX_PLAYERS,
     rulesetVersion: "standard-v1",
     turnSeconds: TURN_SECONDS,
-    game: room.game ? publicGameState(room.game) : undefined,
+    game: room.game ? publicGameState(room.game, room.turnEndsAt) : undefined,
   };
+}
+
+function setTurnDeadline(room: Room): void {
+  room.turnEndsAt = room.status === "in_game" && room.game
+    ? Date.now() + TURN_SECONDS * 1000
+    : undefined;
 }
 
 function emitRoom(room: Room): void {
@@ -249,6 +258,7 @@ io.on("connection", (socket) => {
 
     room.status = "in_game";
     room.game = createGame(room.players.map(({ id, displayName }) => ({ id, displayName })));
+    setTurnDeadline(room);
     ack({ ok: true, room: publicRoom(room) });
     emitRoom(room);
   });
@@ -276,9 +286,12 @@ io.on("connection", (socket) => {
     const cardId = "cardId" in payload && typeof payload.cardId === "string" ? payload.cardId : "";
     const chosenColor = "chosenColor" in payload && typeof payload.chosenColor === "string" ? payload.chosenColor : undefined;
     try {
+      const previousPlayerId = getCurrentPlayer(room.game).id;
       playCard(room.game, player.id, cardId, chosenColor as "red" | "yellow" | "green" | "blue" | undefined);
       player.unoCalled = false;
       room.status = room.game.status === "finished" ? "finished" : "in_game";
+      if (room.status === "in_game" && getCurrentPlayer(room.game).id !== previousPlayerId) setTurnDeadline(room);
+      if (room.status === "finished") room.turnEndsAt = undefined;
       ack({ ok: true, room: publicRoom(room) });
       emitRoom(room);
       if (room.status === "finished") scheduleCleanup(room);
@@ -293,8 +306,10 @@ io.on("connection", (socket) => {
     const player = ensureRoomPlayer(socket, room);
     if (!player) return errorAck(ack, "NOT_IN_ROOM", "Join a room first.");
     try {
+      const previousPlayerId = getCurrentPlayer(room.game).id;
       drawOne(room.game, player.id);
       player.unoCalled = false;
+      if (getCurrentPlayer(room.game).id !== previousPlayerId) setTurnDeadline(room);
       ack({ ok: true, room: publicRoom(room) });
       emitRoom(room);
     } catch (error) {

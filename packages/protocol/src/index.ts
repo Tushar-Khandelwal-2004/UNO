@@ -60,6 +60,8 @@ export interface PublicRoom {
       drawPileCount: number;
       version: number;
       winnerId?: string;
+      direction?: 1 | -1;
+      turnEndsAt?: number;
     };
 }
 

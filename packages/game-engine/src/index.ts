@@ -117,9 +117,14 @@ export function getCurrentPlayer(state: GameState): GamePlayer {
 export function isPlayable(card: Card, state: GameState): boolean {
   const topCard = state.discardPile[state.discardPile.length - 1];
   if (!topCard) return false;
+  return canPlay(card, topCard, state.currentColor);
+}
+
+// Optional public helper used by the client to calculate legal-card styling.
+export function canPlay(card: Card, topCard: Card, currentColor: CardColor): boolean {
   return (
     card.color === "wild" ||
-    card.color === state.currentColor ||
+    card.color === currentColor ||
     card.kind === topCard.kind && card.value === topCard.value
   );
 }
@@ -213,10 +218,12 @@ export function playCard(
   };
 }
 
-export function publicGameState(state: GameState): Pick<GameState, "status" | "currentColor" | "version" | "winnerId"> & {
+export function publicGameState(state: GameState, turnEndsAt?: number): Pick<GameState, "status" | "currentColor" | "version" | "winnerId"> & {
   currentPlayerId: string;
   topCard: Card;
   drawPileCount: number;
+  direction?: 1 | -1;
+  turnEndsAt?: number;
 } {
   const currentPlayer = getCurrentPlayer(state);
   const topCard = state.discardPile[state.discardPile.length - 1];
@@ -229,5 +236,7 @@ export function publicGameState(state: GameState): Pick<GameState, "status" | "c
     currentPlayerId: currentPlayer.id,
     topCard,
     drawPileCount: state.drawPile.length,
+    direction: state.direction,
+    turnEndsAt,
   };
 }

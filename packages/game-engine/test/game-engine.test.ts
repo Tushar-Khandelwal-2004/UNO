@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGame, createDeck, isPlayable, playCard } from "../src/index.js";
+import { canPlay, createGame, createDeck, isPlayable, playCard } from "../src/index.js";
 
 describe("UNO game engine", () => {
   it("creates a 108-card deck", () => {
@@ -26,5 +26,13 @@ describe("UNO game engine", () => {
 
     if (!card) return;
     expect(() => playCard(state, "p1", card.id)).toThrow("Card cannot be played");
+  });
+
+  it("shares the same legality rule through canPlay", () => {
+    const topCard = { id: "top", color: "blue" as const, kind: "number" as const, value: 7 };
+    expect(canPlay({ id: "same-color", color: "blue", kind: "number", value: 2 }, topCard, "blue")).toBe(true);
+    expect(canPlay({ id: "same-value", color: "red", kind: "number", value: 7 }, topCard, "blue")).toBe(true);
+    expect(canPlay({ id: "wild", color: "wild", kind: "wild" }, topCard, "blue")).toBe(true);
+    expect(canPlay({ id: "blocked", color: "red", kind: "number", value: 2 }, topCard, "blue")).toBe(false);
   });
 });
