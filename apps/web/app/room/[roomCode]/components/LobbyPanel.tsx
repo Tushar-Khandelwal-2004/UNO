@@ -3,5 +3,30 @@
 import type { PublicRoom } from "@uno/protocol";
 
 export function LobbyPanel({ room, isHost, onStart, onTransferHost, onCopy }: { room: PublicRoom; isHost: boolean; onStart: () => void; onTransferHost: (playerId: string) => void; onCopy: () => void }) {
-  return <div className="mx-auto grid w-full max-w-2xl place-items-center gap-3 text-center"><span className="text-xs font-extrabold uppercase tracking-[.18em] text-uno-accent">Room lobby</span><h2 className="m-0 text-2xl font-extrabold tracking-tight">Ready when you are?</h2><p className="m-0 max-w-md text-sm text-uno-muted">{room.players.length < 2 ? "Invite at least one more player to unlock the match." : "Everyone is in. The host can start the table."}</p><button type="button" onClick={onCopy} className="min-h-11 rounded-button bg-white/10 px-4 text-sm font-extrabold hover:bg-white/15">Copy room code <strong>{room.code}</strong></button><div className="grid w-full grid-cols-2 gap-2 text-left">{room.players.map((player) => <div key={player.id} className="flex min-h-12 items-center justify-between rounded-button border border-white/10 bg-black/15 px-3"><span className="flex min-w-0 items-center gap-2"><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-uno-blue bg-[#7a4c31] text-xs font-extrabold">{player.displayName.slice(0, 1).toUpperCase()}</span><span className="truncate text-sm font-bold">{player.displayName}</span></span><span className="text-[10px] font-bold uppercase text-uno-muted">{player.isHost ? "Host" : player.connected ? "Ready" : "Offline"}</span>{isHost && !player.isHost ? <button type="button" className="ml-2 text-[10px] font-extrabold text-uno-accent" onClick={() => onTransferHost(player.id)}>Make host</button> : null}</div>)}</div>{isHost ? <button type="button" disabled={room.players.length < 2} onClick={onStart} className="mt-2 min-h-12 min-w-52 rounded-button bg-gradient-to-r from-[#ffd858] to-[#e8ae21] px-5 font-extrabold text-[#423100] shadow-lg disabled:opacity-45">Start game <span className="ml-2 text-xl">→</span></button> : <div className="rounded-full border border-white/15 bg-black/15 px-4 py-2 text-sm font-bold text-white/75">Waiting for {room.players.find((player) => player.isHost)?.displayName ?? "the host"} to start</div>}</div>;
+  const manyPlayers = room.players.length > 4;
+  const hostName = room.players.find((player) => player.isHost)?.displayName ?? "the host";
+
+  return (
+    <div className="lobby-panel" data-layout-role="lobby-panel">
+      <span className="lobby-kicker">Room lobby</span>
+      <h1>Ready when you are?</h1>
+      <p>{room.players.length < 2 ? "Invite at least one more player to unlock the match." : "Everyone is in. The host can start the table."}</p>
+      <div className="lobby-code-row">
+        <span className="lobby-code-label">Room code</span>
+        <strong>{room.code}</strong>
+        <button type="button" onClick={onCopy}>Copy</button>
+      </div>
+      <div className={`lobby-player-list ${manyPlayers ? "lobby-player-list-many" : ""}`} aria-label="Players in the room">
+        {room.players.map((player) => (
+          <div className="lobby-player" key={player.id}>
+            <span className={`lobby-avatar ${player.connected ? "" : "offline"}`}>{player.displayName.slice(0, 1).toUpperCase()}</span>
+            <span className="lobby-player-name">{player.displayName}</span>
+            <span className="lobby-player-state">{player.isHost ? "Host" : player.connected ? "Ready" : "Offline"}</span>
+            {isHost && !player.isHost ? <button type="button" className="make-host" onClick={() => onTransferHost(player.id)}>Make host</button> : null}
+          </div>
+        ))}
+      </div>
+      {isHost ? <button type="button" disabled={room.players.length < 2} onClick={onStart} className="lobby-start">Start game <span aria-hidden="true">→</span></button> : <div className="lobby-waiting">Waiting for {hostName} to start</div>}
+    </div>
+  );
 }

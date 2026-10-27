@@ -1,5 +1,14 @@
 "use client";
 
-export function ActionBar({ isMyTurn, hasNoMoves, canCallUno, onDraw, onCallUno, isShortLandscape }: { isMyTurn: boolean; hasNoMoves: boolean; canCallUno: boolean; onDraw: () => void; onCallUno: () => void; isShortLandscape: boolean }) {
-  return <div className={`short-landscape-actions grid w-full max-w-md grid-cols-2 items-center justify-center gap-2 ${isShortLandscape ? "" : ""}`}><button type="button" onClick={onDraw} disabled={!isMyTurn} className={`min-h-11 min-w-[140px] rounded-button bg-uno-blue px-5 text-sm font-extrabold text-white shadow-lg transition-transform hover:-translate-y-0.5 disabled:opacity-45 ${hasNoMoves ? "legal-pulse" : ""}`}>{hasNoMoves ? "Draw card (no moves)" : "Draw card"}</button><button type="button" onClick={onCallUno} disabled={!canCallUno} className="min-h-11 min-w-[140px] rounded-button bg-[#0a3458] px-5 text-sm font-extrabold text-white shadow-lg disabled:opacity-45">Call UNO</button></div>;
+export function ActionBar({ isMyTurn, hasNoMoves, drewThisTurn, canCallUno, unoLabel, onDraw, onCallUno }: { isMyTurn: boolean; hasNoMoves: boolean; drewThisTurn: boolean; canCallUno: boolean; unoLabel: string; onDraw: () => void; onCallUno: () => void }) {
+  return (
+    <div className="action-bar">
+      <button data-testid="draw-action" type="button" onClick={onDraw} disabled={!isMyTurn} className={`action-button action-primary ${hasNoMoves ? "legal-pulse" : ""}`}>
+        {drewThisTurn ? "Pass" : "Draw card"}
+      </button>
+      <button data-testid="call-uno" type="button" onClick={onCallUno} disabled={!canCallUno} className={`action-button action-uno ${unoLabel.startsWith("UNO!") ? "uno-ready" : ""}`}>
+        {unoLabel}
+      </button>
+    </div>
+  );
 }

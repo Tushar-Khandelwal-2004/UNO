@@ -1,0 +1,866 @@
+[
+  {
+    "viewport": "1920x880",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/lobby-1p.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/lobby-8p.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "1920x880",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1920x880/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/lobby-1p.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/lobby-8p.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "1366x650",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1366x650/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/lobby-1p.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/lobby-8p.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "1280x587",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x587/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/lobby-1p.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/lobby-8p.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "1280x720",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1280x720/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/lobby-1p.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/lobby-8p.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "1024x768",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/1024x768/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/lobby-1p.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/lobby-8p.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "768x1024",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/768x1024/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/lobby-1p.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/lobby-8p.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "640x360",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/640x360/game-8p-hand-25.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "lobby",
+    "players": 1,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/lobby-1p.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "lobby",
+    "players": 8,
+    "hand_size": "\u2014",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/lobby-8p.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-2p-hand-7.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 2,
+    "hand_size": "message + UNO",
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-2p-bubbles-uno.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-2p-hand-15.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 2,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-2p-hand-25.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-4p-hand-7.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-4p-hand-15.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 4,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-4p-hand-25.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 7,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-8p-hand-7.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 15,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-8p-hand-15.png"
+  },
+  {
+    "viewport": "360x640",
+    "screen": "game",
+    "players": 8,
+    "hand_size": 25,
+    "overlaps_found": 0,
+    "scroll": "none",
+    "screenshot": "artifacts/uno-ui-proof/360x640/game-8p-hand-25.png"
+  }
+]
