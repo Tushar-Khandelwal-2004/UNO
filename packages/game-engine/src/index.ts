@@ -267,6 +267,12 @@ export function removePlayer(state: GameState, playerId: string): void {
   const removedIndex = state.players.findIndex((player) => player.id === playerId);
   if (removedIndex < 0) throw new Error("Player does not exist");
   const removed = state.players[removedIndex]!;
+  const wasCurrent = state.currentPlayerIndex === removedIndex;
+  const pendingDrawWasForRemovedPlayer = wasCurrent && state.pendingDraw !== undefined;
+  const pendingSwapChooserId = state.pendingSwapPlayerId;
+  const nextPlayerBeforeRemoval = wasCurrent
+    ? state.players[(removedIndex + state.direction + state.players.length) % state.players.length]
+    : undefined;
   state.discardPile.push(...removed.hand);
   state.players.splice(removedIndex, 1);
   if (state.players.length < 2) {
@@ -277,9 +283,24 @@ export function removePlayer(state: GameState, playerId: string): void {
     state.pendingDraw = undefined;
     return;
   }
-  if (state.pendingSwapPlayerId === playerId) state.pendingSwapPlayerId = undefined;
-  if (removedIndex < state.currentPlayerIndex) state.currentPlayerIndex -= 1;
-  if (state.currentPlayerIndex >= state.players.length) state.currentPlayerIndex = 0;
+  if (wasCurrent) {
+    const nextPlayerIndex = nextPlayerBeforeRemoval
+      ? state.players.findIndex((player) => player.id === nextPlayerBeforeRemoval.id)
+      : -1;
+    state.currentPlayerIndex = nextPlayerIndex >= 0 ? nextPlayerIndex : 0;
+    state.drewThisTurn = false;
+  } else if (removedIndex < state.currentPlayerIndex) {
+    state.currentPlayerIndex -= 1;
+  }
+  if (pendingDrawWasForRemovedPlayer) state.pendingDraw = undefined;
+  if (pendingSwapChooserId) {
+    state.pendingSwapPlayerId = undefined;
+    const chooserIndex = state.players.findIndex((player) => player.id === pendingSwapChooserId);
+    if (chooserIndex >= 0) {
+      state.currentPlayerIndex = chooserIndex;
+      advanceTurn(state);
+    }
+  }
   state.version += 1;
 }
 

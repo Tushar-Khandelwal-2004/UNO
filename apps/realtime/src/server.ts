@@ -104,6 +104,11 @@ function errorAck(ack: Ack | undefined, code: string, message: string): void {
 }
 
 export function createRealtimeServer(options: RealtimeServerOptions = {}): RealtimeServer {
+  const publicTurnSeconds = new Set<GameSettings["turnSeconds"]>([0, 15, 30, 45, 60]);
+  const requestedTurnSeconds = options.settings?.turnSeconds ?? options.turnSeconds;
+  if (requestedTurnSeconds !== undefined && !publicTurnSeconds.has(requestedTurnSeconds)) {
+    if (process.env.NODE_ENV === "production") throw new Error("Non-public turn timer overrides are unavailable in production");
+  }
   const base = defaultScheduler();
   const clock: Scheduler = { now: options.now ?? base.now, setTimeout: options.setTimeout ?? base.setTimeout, clearTimeout: options.clearTimeout ?? base.clearTimeout };
   const defaults: GameSettings = { ...DEFAULT_GAME_SETTINGS, ...options.settings, ...(options.turnSeconds === undefined ? {} : { turnSeconds: options.turnSeconds }) };
@@ -365,6 +370,7 @@ export function createRealtimeServer(options: RealtimeServerOptions = {}): Realt
     const target = roomPlayer(room, playerId);
     if (!target) return;
     const wasCurrent = room.game ? getCurrentPlayer(room.game).id === playerId : false;
+    const hadPendingSwap = Boolean(room.game?.pendingSwapPlayerId);
     const previousDeadline = room.turnEndsAt;
     if (rememberKick) room.kickedGuestIds.add(playerId);
     if (room.game) removePlayer(room.game, playerId);
@@ -378,7 +384,7 @@ export function createRealtimeServer(options: RealtimeServerOptions = {}): Realt
       clearGameTimers(room);
       if (room.status === "finished") scheduleCleanup(room);
     } else if (room.game?.status === "playing") {
-      startTurnTimer(room, wasCurrent ? undefined : previousDeadline);
+      startTurnTimer(room, wasCurrent || hadPendingSwap ? undefined : previousDeadline);
     }
     emitRoom(room);
   }

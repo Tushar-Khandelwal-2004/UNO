@@ -146,7 +146,7 @@ describe("room settings, kick, swap, and authoritative timers", () => {
 
   it("supports a seven swap and enforces swap authorization", async () => {
     const match = await createMatch(3);
-    await emitAck(match.sockets[0]!, "room:settings", { sevenZero: true, turnSeconds: 0 });
+    await emitAck(match.sockets[0]!, "room:settings", { sevenZero: true, turnSeconds: 15 });
     await emitAck(match.sockets[0]!, "room:start");
     const room = roomOf(match);
     const current = room.game!.players[room.game!.currentPlayerIndex]!;
@@ -162,11 +162,15 @@ describe("room settings, kick, swap, and authoritative timers", () => {
     const played = await emitAck(currentSocket, "game:play", { cardId: "seven" });
     expect(played.ok).toBe(true);
     expect(played.room?.game?.pendingSwapPlayerId).toBe(current.id);
+    expect(played.room?.game?.currentPlayerId).toBe(current.id);
+    expect(room.game!.players.find((player) => player.id === current.id)!.hand[0]?.id).toBe("spare");
     const wrong = await emitAck(match.sockets.find((socket) => socket.id !== currentSocket.id)!, "game:swap", { targetPlayerId: target.id });
     expect(wrong).toMatchObject({ ok: false, code: "INVALID_MOVE" });
     const swapped = await emitAck(currentSocket, "game:swap", { targetPlayerId: target.id });
     expect(swapped.ok).toBe(true);
     expect(swapped.room?.game?.pendingSwapPlayerId).toBeUndefined();
+    expect(swapped.room?.game?.currentPlayerId).toBe(target.id);
+    expect(swapped.room?.game?.turnEndsAt! - swapped.room?.game?.serverTime!).toBe(15_000);
   });
 
   it("supports a no-timer room and preserves a deadline on non-turn state emits", async () => {
@@ -178,7 +182,8 @@ describe("room settings, kick, swap, and authoritative timers", () => {
     expect(roomOf(noTimer).turnTimer).toBeUndefined();
 
     const timed = await createMatch(2, { now: () => Date.now() });
-    await emitAck(timed.sockets[0]!, "room:start");
+    const timedStart = await emitAck(timed.sockets[0]!, "room:start");
+    expect(timedStart.room!.game!.turnEndsAt! - timedStart.room!.game!.serverTime!).toBe(30_000);
     const room = roomOf(timed);
     const deadline = room.turnEndsAt;
     const reaction = await emitAck(timed.sockets[0]!, "player:reaction", { messageId: "Nice!" });
@@ -224,6 +229,43 @@ describe("room settings, kick, swap, and authoritative timers", () => {
     vi.advanceTimersByTime(1);
     expect(room.game!.players[room.game!.currentPlayerIndex]!.id).not.toBe(current.id);
     expect(room.turnEndsAt).toBe(30_000);
+  });
+
+  it("chooses a random target when a seven swap times out", async () => {
+    vi.useFakeTimers({ now: 0 });
+    const match = await createMatch(3, { turnSeconds: 15, random: () => 0 });
+    await emitAck(match.sockets[0]!, "room:settings", { sevenZero: true });
+    await emitAck(match.sockets[0]!, "room:start");
+    const room = roomOf(match);
+    const current = room.game!.players[room.game!.currentPlayerIndex]!;
+    const target = room.game!.players.find((player) => player.id !== current.id)!;
+    current.hand = [
+      { id: "timeout-seven", color: "red", kind: "number", value: 7 },
+      { id: "timeout-spare", color: "blue", kind: "number", value: 1 },
+    ];
+    target.hand = [{ id: "timeout-target", color: "green", kind: "number", value: 2 }];
+    room.game!.discardPile = [{ id: "timeout-top", color: "red", kind: "number", value: 5 }];
+    room.game!.currentColor = "red";
+    const currentSocket = match.sockets.find((socket) => socket.id === room.players.find((player) => player.id === current.id)?.socketId)!;
+
+    const played = await emitAck(currentSocket, "game:play", { cardId: "timeout-seven" });
+    expect(played.room?.game?.pendingSwapPlayerId).toBe(current.id);
+    vi.advanceTimersByTime(15_000);
+
+    expect(room.game!.pendingSwapPlayerId).toBeUndefined();
+    expect(room.game!.currentPlayerIndex).not.toBe(room.game!.players.findIndex((player) => player.id === current.id));
+    expect(room.game!.players.find((player) => player.id === current.id)!.hand[0]?.id).toBe("timeout-target");
+  });
+
+  it("rejects the non-public two-second timer override in production", () => {
+    const previous = process.env.NODE_ENV;
+    process.env.NODE_ENV = "production";
+    try {
+      expect(() => createRealtimeServer({ turnSeconds: 2 as never })).toThrow("unavailable in production");
+      expect(() => createRealtimeServer({ settings: { turnSeconds: 2 as never } })).toThrow("unavailable in production");
+    } finally {
+      process.env.NODE_ENV = previous;
+    }
   });
 });
 

@@ -8,6 +8,7 @@ import {
   isPlayable,
   passTurn,
   playCard,
+  removePlayer,
   swapHands,
   type Card,
   type GameState,
@@ -284,5 +285,93 @@ describe("UNO game engine", () => {
     expect(state.players[1]!.hand[0]?.id).toBe("zero-spare");
     expect(state.players[0]!.hand[0]?.id).toBe("c2");
     expect(state.players[2]!.hand[0]?.id).toBe("b2");
+  });
+
+  it("clears a pending penalty when the kicked player was facing it", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { stackDrawCards: true } });
+    state.currentPlayerIndex = 1;
+    state.pendingDraw = 4;
+
+    removePlayer(state, "p2");
+
+    expect(state.pendingDraw).toBeUndefined();
+    expect(state.players[state.currentPlayerIndex]!.id).toBe("p3");
+  });
+
+  it("keeps a pending penalty when another player is kicked", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { stackDrawCards: true } });
+    state.pendingDraw = 4;
+
+    removePlayer(state, "p3");
+
+    expect(state.pendingDraw).toBe(4);
+    expect(state.players[state.currentPlayerIndex]!.id).toBe("p1");
+  });
+
+  it("moves a kicked current player to the next player in the current direction", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ]);
+    state.currentPlayerIndex = 1;
+    state.direction = -1;
+
+    removePlayer(state, "p2");
+
+    expect(state.players[state.currentPlayerIndex]!.id).toBe("p1");
+  });
+
+  it("cancels a pending swap when its chooser or a possible target is kicked", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { sevenZero: true } });
+    state.pendingSwapPlayerId = "p1";
+    removePlayer(state, "p2");
+    expect(state.pendingSwapPlayerId).toBeUndefined();
+    expect(state.players[state.currentPlayerIndex]!.id).toBe("p3");
+
+    const secondState = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { sevenZero: true } });
+    secondState.pendingSwapPlayerId = "p1";
+    removePlayer(secondState, "p1");
+    expect(secondState.pendingSwapPlayerId).toBeUndefined();
+  });
+
+  it("rotates every hand one seat in the current direction", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { sevenZero: true } });
+    state.players[0]!.hand = [
+      { id: "zero", color: "red", kind: "number", value: 0 },
+      { id: "a", color: "blue", kind: "number", value: 1 },
+    ];
+    state.players[1]!.hand = [{ id: "b", color: "green", kind: "number", value: 2 }];
+    state.players[2]!.hand = [{ id: "c", color: "yellow", kind: "number", value: 3 }];
+    state.currentPlayerIndex = 0;
+    state.direction = -1;
+    state.discardPile = [{ id: "zero-top", color: "red", kind: "number", value: 5 }];
+    state.currentColor = "red";
+
+    playCard(state, "p1", "zero");
+
+    expect(state.players[0]!.hand[0]?.id).toBe("b");
+    expect(state.players[1]!.hand[0]?.id).toBe("c");
+    expect(state.players[2]!.hand[0]?.id).toBe("a");
   });
 });
