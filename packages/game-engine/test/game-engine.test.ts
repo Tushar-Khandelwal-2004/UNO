@@ -8,6 +8,7 @@ import {
   isPlayable,
   passTurn,
   playCard,
+  swapHands,
   type Card,
   type GameState,
 } from "../src/index.js";
@@ -162,5 +163,126 @@ describe("UNO game engine", () => {
 
     expect(state.currentPlayerIndex).toBe(1);
     expect(state.drewThisTurn).toBe(false);
+  });
+
+  it("uses all configurable dealing and rule defaults", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+    ], { settings: { startingHand: 5, turnSeconds: 0, stackDrawCards: true, unoPenaltyCards: 2, drawUntilPlayable: true, sevenZero: true } });
+
+    expect(state.settings).toEqual({ startingHand: 5, turnSeconds: 0, stackDrawCards: true, unoPenaltyCards: 2, drawUntilPlayable: true, sevenZero: true });
+    expect(state.players.every((player) => player.hand.length === 5)).toBe(true);
+  });
+
+  it("stacks Draw Twos into one pending penalty", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { stackDrawCards: true }, random: () => 0.5 });
+    state.players[0]!.hand = [
+      { id: "d1", color: "red", kind: "draw2" },
+      { id: "p1-spare", color: "blue", kind: "number", value: 1 },
+    ];
+    state.players[1]!.hand = [
+      { id: "d2", color: "red", kind: "draw2" },
+      { id: "p2-spare", color: "blue", kind: "number", value: 2 },
+    ];
+    state.players[2]!.hand = [{ id: "spare", color: "blue", kind: "number", value: 1 }];
+    state.discardPile = [{ id: "top", color: "red", kind: "number", value: 5 }];
+    state.currentColor = "red";
+    state.drawPile = [];
+
+    playCard(state, "p1", "d1");
+    playCard(state, "p2", "d2");
+
+    expect(state.pendingDraw).toBe(4);
+    expect(state.currentPlayerIndex).toBe(2);
+    const before = state.players[2]!.hand.length;
+    drawOne(state, "p3");
+    expect(state.players[2]!.hand).toHaveLength(before + 4);
+    expect(state.pendingDraw).toBeUndefined();
+    expect(state.currentPlayerIndex).toBe(0);
+  });
+
+  it("stacks Wild Draw Fours only against Wild Draw Fours", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { stackDrawCards: true }, random: () => 0.5 });
+    state.players[0]!.hand = [
+      { id: "w1", color: "wild", kind: "wildDraw4" },
+      { id: "p1-spare", color: "blue", kind: "number", value: 1 },
+    ];
+    state.players[1]!.hand = [
+      { id: "w2", color: "wild", kind: "wildDraw4" },
+      { id: "p2-spare", color: "green", kind: "number", value: 2 },
+    ];
+    state.players[2]!.hand = [{ id: "p3-spare", color: "yellow", kind: "number", value: 3 }];
+    state.discardPile = [{ id: "top", color: "red", kind: "number", value: 5 }];
+    state.currentColor = "red";
+    state.drawPile = [];
+
+    playCard(state, "p1", "w1", "blue");
+    playCard(state, "p2", "w2", "green");
+
+    expect(state.pendingDraw).toBe(8);
+    expect(state.currentPlayerIndex).toBe(2);
+  });
+
+  it("draws until a playable card is found when configured", () => {
+    const state = testState([{ id: "spare", color: "blue", kind: "number", value: 1 }]);
+    state.settings.drawUntilPlayable = true;
+    state.drawPile = [
+      { id: "playable", color: "red", kind: "number", value: 9 },
+      { id: "unplayable", color: "blue", kind: "number", value: 2 },
+    ];
+
+    const card = drawOne(state, "p1");
+
+    expect(card.id).toBe("playable");
+    expect(state.players[0]!.hand.some((candidate) => candidate.id === "unplayable")).toBe(true);
+    expect(state.currentPlayerIndex).toBe(0);
+    expect(state.drewThisTurn).toBe(true);
+  });
+
+  it("waits for a seven swap and rotates hands for zero", () => {
+    const state = createGame([
+      { id: "p1", displayName: "A" },
+      { id: "p2", displayName: "B" },
+      { id: "p3", displayName: "C" },
+    ], { settings: { sevenZero: true }, random: () => 0.5 });
+    state.players[0]!.hand = [
+      { id: "seven", color: "red", kind: "number", value: 7 },
+      { id: "a", color: "blue", kind: "number", value: 1 },
+    ];
+    state.players[1]!.hand = [{ id: "b", color: "blue", kind: "number", value: 1 }];
+    state.players[2]!.hand = [{ id: "c", color: "green", kind: "number", value: 2 }];
+    state.discardPile = [{ id: "top", color: "red", kind: "number", value: 5 }];
+    state.currentColor = "red";
+    state.drawPile = [];
+
+    playCard(state, "p1", "seven");
+    expect(state.pendingSwapPlayerId).toBe("p1");
+    expect(state.currentPlayerIndex).toBe(0);
+    swapHands(state, "p1", "p2");
+    expect(state.players[0]!.hand[0]?.id).toBe("b");
+    expect(state.players[1]!.hand[0]?.id).toBe("a");
+
+    state.players[0]!.hand = [
+      { id: "zero", color: "red", kind: "number", value: 0 },
+      { id: "zero-spare", color: "blue", kind: "number", value: 3 },
+    ];
+    state.players[1]!.hand = [{ id: "b2", color: "blue", kind: "number", value: 1 }];
+    state.players[2]!.hand = [{ id: "c2", color: "green", kind: "number", value: 2 }];
+    state.currentPlayerIndex = 0;
+    state.discardPile = [{ id: "top2", color: "red", kind: "number", value: 5 }];
+    state.currentColor = "red";
+    playCard(state, "p1", "zero");
+    expect(state.players[1]!.hand[0]?.id).toBe("zero-spare");
+    expect(state.players[0]!.hand[0]?.id).toBe("c2");
+    expect(state.players[2]!.hand[0]?.id).toBe("b2");
   });
 });

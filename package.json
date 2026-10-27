@@ -14,6 +14,7 @@
     "build:apps": "npm run build --workspace @uno/realtime && npm run build --workspace @uno/web",
     "build": "npm run build:packages && npm run build:apps",
     "smoke:realtime": "node --conditions=development --import tsx/esm scripts/uno-realtime-smoke.mts",
+    "smoke:settings": "node --conditions=development --import tsx/esm scripts/uno-settings-smoke.mts",
     "proof:ui": "node --conditions=development --import tsx/esm scripts/uno-ui-proof.mts",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"

@@ -22,6 +22,19 @@ export const transferHostSchema = z.object({
   playerId: z.string().min(1),
 });
 
+export const targetPlayerSchema = z.object({
+  targetPlayerId: z.string().min(1),
+}).strict();
+
+export const roomSettingsSchema = z.object({
+  startingHand: z.number().int().min(5).max(10).optional(),
+  turnSeconds: z.union([z.literal(0), z.literal(15), z.literal(30), z.literal(45), z.literal(60)]).optional(),
+  stackDrawCards: z.boolean().optional(),
+  unoPenaltyCards: z.union([z.literal(2), z.literal(4)]).optional(),
+  drawUntilPlayable: z.boolean().optional(),
+  sevenZero: z.boolean().optional(),
+}).strict();
+
 export const reactionSchema = z.object({
   messageId: z.enum(["Nice!", "Dang!", "GG", "Hurry up!", "Oops", "Wow!", "Your turn", "Good game"]),
 });
@@ -34,6 +47,20 @@ export type CreateRoomInput = z.infer<typeof createRoomSchema>;
 export type JoinRoomInput = z.infer<typeof joinRoomSchema>;
 export type ReactionInput = z.infer<typeof reactionSchema>;
 export type QuickMessage = ReactionInput["messageId"];
+export type TargetPlayerInput = z.infer<typeof targetPlayerSchema>;
+export type RoomSettings = {
+  startingHand: number;
+  turnSeconds: 0 | 15 | 30 | 45 | 60;
+  stackDrawCards: boolean;
+  unoPenaltyCards: 2 | 4;
+  drawUntilPlayable: boolean;
+  sevenZero: boolean;
+};
+export type RoomSettingsPatch = z.infer<typeof roomSettingsSchema>;
+export interface KickedPayload {
+  roomCode: string;
+  reason: string;
+}
 export type NoticeType = "draw_penalty" | "skip" | "reverse" | "timeout" | "uno_called" | "uno_penalty";
 
 export interface GameNotice {
@@ -62,7 +89,8 @@ export interface PublicRoom {
   players: PublicPlayer[];
   maxPlayers: number;
   rulesetVersion: string;
-  turnSeconds: number;
+  settings: RoomSettings;
+  turnSeconds: RoomSettings["turnSeconds"];
   game?: {
     currentPlayerId: string;
     currentColor: string;
@@ -74,7 +102,9 @@ export interface PublicRoom {
     drewThisTurn?: boolean;
     turnEndsAt?: number;
     serverTime?: number;
-    unoWindow?: { playerId: string; endsAt: number };
+      unoWindow?: { playerId: string; endsAt: number };
+      pendingDraw?: number;
+      pendingSwapPlayerId?: string;
   };
 }
 
