@@ -268,6 +268,19 @@ button:disabled {
 }
 
 @media (max-height: 480px) and (orientation: landscape) {
+  .lobby-panel-wrap { padding: 8px; }
+  .lobby-panel { gap: 4px; }
+  .lobby-panel h1 { font-size: 22px; }
+  .lobby-panel p { font-size: 10px; }
+  .lobby-code-row { gap: 8px; }
+  .lobby-code-row strong { font-size: 16px; }
+  .lobby-player-list { gap: 4px; }
+  .lobby-player { min-height: 28px; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 4px; padding: 0 6px; }
+  .lobby-avatar { width: 22px; height: 22px; font-size: 9px; }
+  .lobby-player-name { font-size: 10px; }
+  .lobby-player-state { display: none; }
+  .make-host { grid-column: auto; font-size: 8px; }
+  .lobby-start { min-height: 32px; width: 180px; font-size: 11px; }
   .game-shell { grid-template-rows: 44px minmax(0, 1fr) 40px minmax(0, calc(var(--card-height) + 20px)); }
   .game-table-shell { grid-row: 2; grid-column: 1; padding-right: 88px; }
   .player-info-row { grid-row: 3; grid-column: 1; }

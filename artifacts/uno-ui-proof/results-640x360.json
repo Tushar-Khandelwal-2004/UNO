@@ -30,7 +30,7 @@
     "viewport": "640x360",
     "screen": "game",
     "players": 2,
-    "handSize": 92,
+    "handSize": 33,
     "overlapsFound": 0,
     "scroll": "none",
     "screenshot": "artifacts/uno-ui-proof/640x360/game-2p-bubbles-uno.png"
