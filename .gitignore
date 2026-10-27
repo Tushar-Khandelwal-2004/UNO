@@ -22,3 +22,9 @@ docs/
 
 # Chat/tool attachments and local agent state
 .opencode/
+
+# Generated UI proof screenshots and latest-run summaries
+artifacts/uno-ui-proof/*.png
+artifacts/uno-ui-proof/*-contact.png
+artifacts/uno-ui-proof/results.json
+artifacts/uno-ui-proof/results.md
