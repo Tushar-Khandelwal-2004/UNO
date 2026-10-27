@@ -23,7 +23,7 @@ export const transferHostSchema = z.object({
 });
 
 export const reactionSchema = z.object({
-  messageId: z.enum(["good-luck", "nice-move", "oops", "uno", "gg"]),
+  messageId: z.enum(["Nice!", "Dang!", "GG", "Hurry up!", "Oops", "Wow!", "Your turn", "Good game"]),
 });
 
 export const callUnoSchema = z.object({
@@ -33,6 +33,16 @@ export const callUnoSchema = z.object({
 export type CreateRoomInput = z.infer<typeof createRoomSchema>;
 export type JoinRoomInput = z.infer<typeof joinRoomSchema>;
 export type ReactionInput = z.infer<typeof reactionSchema>;
+export type QuickMessage = ReactionInput["messageId"];
+export type NoticeType = "draw_penalty" | "skip" | "reverse" | "timeout" | "uno_called" | "uno_penalty";
+
+export interface GameNotice {
+  id: number;
+  type: NoticeType;
+  playerId: string;
+  amount?: number;
+  text: string;
+}
 
 export type RoomStatus = "open" | "locked" | "in_game" | "finished";
 
@@ -43,7 +53,7 @@ export interface PublicPlayer {
   connected: boolean;
   cardCount: number;
   unoCalled: boolean;
-  reaction?: string;
+  reaction?: QuickMessage;
 }
 
 export interface PublicRoom {
@@ -53,16 +63,19 @@ export interface PublicRoom {
   maxPlayers: number;
   rulesetVersion: string;
   turnSeconds: number;
-    game?: {
-      currentPlayerId: string;
-      currentColor: string;
-      topCard: { color: string; kind: string; value?: number };
-      drawPileCount: number;
-      version: number;
-      winnerId?: string;
-      direction?: 1 | -1;
-      turnEndsAt?: number;
-    };
+  game?: {
+    currentPlayerId: string;
+    currentColor: string;
+    topCard: { color: string; kind: string; value?: number };
+    drawPileCount: number;
+    version: number;
+    winnerId?: string;
+    direction?: 1 | -1;
+    drewThisTurn?: boolean;
+    turnEndsAt?: number;
+    serverTime?: number;
+    unoWindow?: { playerId: string; endsAt: number };
+  };
 }
 
 export type ServerErrorCode =
@@ -74,4 +87,5 @@ export type ServerErrorCode =
   | "ROOM_NOT_READY"
   | "NOT_YOUR_TURN"
   | "INVALID_MOVE"
+  | "RATE_LIMITED"
   | "NOT_IN_ROOM";
